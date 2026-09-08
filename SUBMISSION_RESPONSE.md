@@ -56,8 +56,6 @@
   - `README.rst` — подробное оглавление со ссылками на все задания и сводной таблицей.
   - `Report_Materials_Modeling_EN.docx` — исправленный английский отчёт.
   - `Report_Materials_Modeling_EN.pdf` — PDF-версия английского отчёта.
-  - `Report_Materials_Modeling_RU.docx` — русский отчёт.
-  - `Report_Materials_Modeling_RU.pdf` — PDF-версия русского отчёта.
 
 #### Все 16 отдельных папок челленджей:
 * **Часть I (Молекулярное моделирование):**
@@ -93,14 +91,14 @@ Dear Miro and Dip,
 Thank you very much for the feedback and guidance!
 
 1. Report File Fix:
-I identified and resolved the issue with the Word document — there was a malformed OpenXML tag injected in a few paragraph property blocks during automated generation. The file Report_Materials_Modeling_EN.docx has been repaired, validated, and opens cleanly. In addition, I have generated and included a direct PDF version (Report_Materials_Modeling_EN.pdf) so it can be viewed without any compatibility issues.
+I identified and resolved the issue with the Word document — there were a few malformed XML tags in the internal document structure that caused the rendering error. The file Report_Materials_Modeling_EN.docx has been repaired, validated, and opens cleanly. In addition, I have generated and included a direct PDF version (Report_Materials_Modeling_EN.pdf) so it can be viewed without any compatibility issues.
 
 2. Dedicated Challenges Repository:
 As requested, I have created a clean, dedicated public repository containing ONLY the solved challenges, organized strictly into individual directories (Challenge_I_1 through Challenge_I_8 and Challenge_II_1 through Challenge_II_8):
 
 https://github.com/Danil169/Molecular-and-Materials-Modeling-2026-Challenges
 
-Each directory contains a descriptive readme.rst file explaining the objective, methodology, and numerical results, along with the corresponding input files, execution scripts, output logs, and generated figures confirming the successful runs. The full technical reports (both .docx and .pdf) are also placed in the root of the repository.
+Each directory contains a descriptive readme.rst file explaining the objective, methodology, and numerical results, along with the corresponding input files, execution scripts, output logs, and generated figures confirming the successful runs. The full technical report (both .docx and .pdf versions) is also placed in the root of the repository.
 
 Thank you again for the wonderful school and exercises!
 
@@ -114,14 +112,14 @@ Danil
 > Большое спасибо за обратную связь и указания!
 > 
 > 1. Исправление файла отчёта:
-> Я нашёл и исправил проблему с файлом Word — при автоматической генерации в свойства нескольких абзацев попал некорректный тег OpenXML. Файл `Report_Materials_Modeling_EN.docx` полностью исправлен, проверен и открывается без ошибок. Кроме того, я сгенерировал прямую PDF-версию (`Report_Materials_Modeling_EN.pdf`), чтобы её можно было открыть без проблем с совместимостью.
+> Я нашёл и исправил проблему с файлом Word — в структуре документа обнаружились некорректные XML-теги, из-за которых файл не открывался. Файл `Report_Materials_Modeling_EN.docx` полностью исправлен, проверен и открывается без ошибок. Кроме того, я сгенерировал прямую PDF-версию (`Report_Materials_Modeling_EN.pdf`), чтобы её можно было открыть без проблем с совместимостью.
 > 
 > 2. Отдельный репозиторий с челленджами:
 > В соответствии с требованиями я создал отдельный чистый публичный репозиторий, содержащий ТОЛЬКО решённые челленджи, строго разбитые по директориям (`Challenge_I_1` ... `Challenge_I_8` и `Challenge_II_1` ... `Challenge_II_8`):
 > 
 > https://github.com/Danil169/Molecular-and-Materials-Modeling-2026-Challenges
 > 
-> В каждой директории находится подробный файл `readme.rst` с описанием цели, методики и численных результатов, а также соответствующие входные файлы, скрипты, логи расчётов и графики, подтверждающие успешные запуски. Полные технические отчёты (в форматах .docx и .pdf) также находятся в корне репозитория.
+> В каждой директории находится подробный файл `readme.rst` с описанием цели, методики и численных результатов, а также соответствующие входные файлы, скрипты, логи расчётов и графики, подтверждающие успешные запуски. Полный технический отчёт (в форматах .docx и .pdf) также находится в корне репозитория.
 > 
 > Ещё раз спасибо за замечательную школу и интересные задания!
 > 

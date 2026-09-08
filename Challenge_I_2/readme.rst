@@ -28,5 +28,5 @@ Results & Observations
 Files in this Directory
 -----------------------
 * ``benchmark_results.json``: Complete QE timing data.
-* ``mopac_outputs/``: MOPAC logs for 1, 2, 4, 8, 16, and 24 threads.
+* ``dna_pm7_threads.out_T*``: MOPAC logs for various thread counts (1, 2, 4, 8, 16, 24).
 * ``ch3_zora_b3lyp_prop.outN4``: NWChem 4-rank parallel execution output.

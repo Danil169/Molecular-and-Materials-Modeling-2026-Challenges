@@ -22,4 +22,4 @@ Results
 Files in this Directory
 -----------------------
 * ``diatomics_atomization_EMT_MACE.py``: Script computing atomization energies for N₂ and O₂.
-* ``diatomics_atomization_EMT_MACE.out``: Execution output and energy table.
+* ``diatomics_atomization.log``: Execution output and energy table.

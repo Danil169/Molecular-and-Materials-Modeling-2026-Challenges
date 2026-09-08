@@ -15,6 +15,6 @@ Results
 
 Files in this Directory
 -----------------------
-* ``water_opt.py``: Relaxation test script using ASE + MACE.
-* ``water_opt.log``: Convergence log.
+* ``water_mace_emt_01.py``: Relaxation test script using ASE + MACE and EMT.
+* ``water_mace.py``: MACE-only water optimization script.
 * ``*.traj``: Trajectory files verifying successful runs.

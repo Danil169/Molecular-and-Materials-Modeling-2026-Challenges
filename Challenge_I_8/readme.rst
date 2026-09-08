@@ -16,6 +16,8 @@ Results
 
 Files in this Directory
 -----------------------
-* ``uo2i2water2_b3lyp_stuttgart_rlc_ecp.nw``: NWChem input deck.
-* ``uo2i2water2_b3lyp_stuttgart_rlc_ecp.out``: NWChem calculation log.
-* ``*.xyz``: Initial and optimized coordinate files.
+* ``mace/uo2i2_core_mace-geopt.py``: MACE pre-optimization script.
+* ``mace/uo2i2_initial.xyz``: Initial coordinate file.
+* ``nwchem/uo2i2water2_b3lyp_stuttgart_rlc_ecp.nw``: NWChem input deck.
+* ``nwchem/uo2i2water2_b3lyp_stuttgart_rlc_ecp.nw_logfileSAVED_VictusNB_N4``: NWChem calculation log.
+* ``nwchem/geopt/``: Geometry optimization step files and final coordinates.

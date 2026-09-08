@@ -23,10 +23,6 @@ Comprehensive Final Reports
   eight embedded figures. (Verified 100% valid OpenXML).
 * **`Report_Materials_Modeling_EN.pdf <Report_Materials_Modeling_EN.pdf>`_**:
   Directly viewable PDF version of the English report.
-* **`Report_Materials_Modeling_RU.docx <Report_Materials_Modeling_RU.docx>`_**:
-  Russian version of the technical report.
-* **`Report_Materials_Modeling_RU.pdf <Report_Materials_Modeling_RU.pdf>`_**:
-  Directly viewable PDF version of the Russian report.
 
 Directory Structure & Solved Challenges
 =======================================
