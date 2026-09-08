@@ -1,0 +1,9 @@
+# QE temporary/scratch files
+**/tmp*/
+**/*.save/
+**/*.wfc*
+**/espresso.err
+
+# Python cache
+__pycache__/
+*.pyc
