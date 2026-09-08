@@ -1,12 +1,12 @@
-⚠️ /home/miroi/work/projects/mol_mat_modeling_schools/Molecular-and-Materials-Modeling-2026-August/molecular-modeling/01_conda_software_space/software_checks/basic_functionality_checks/qe/qe_command.txt not found. Using default: pw.x
-  To specify a custom command, create /home/miroi/work/projects/mol_mat_modeling_schools/Molecular-and-Materials-Modeling-2026-August/molecular-modeling/01_conda_software_space/software_checks/basic_functionality_checks/qe/qe_command.txt
+⚠️ /home/danil/home/work/projects/mol_mat_modeling_schools/Molecular-and-Materials-Modeling-2026-August/molecular-modeling/01_conda_software_space/software_checks/basic_functionality_checks/qe/qe_command.txt not found. Using default: pw.x
+  To specify a custom command, create /home/danil/home/work/projects/mol_mat_modeling_schools/Molecular-and-Materials-Modeling-2026-August/molecular-modeling/01_conda_software_space/software_checks/basic_functionality_checks/qe/qe_command.txt
   with the command path (e.g., /path/to/pw.x)
 
 ============================================================
 ASE Quantum ESPRESSO Testing Suite (Optimized for Speed)
 ============================================================
 
-Script directory: /home/miroi/work/projects/mol_mat_modeling_schools/Molecular-and-Materials-Modeling-2026-August/molecular-modeling/01_conda_software_space/software_checks/basic_functionality_checks/qe
+Script directory: /home/danil/home/work/projects/mol_mat_modeling_schools/Molecular-and-Materials-Modeling-2026-August/molecular-modeling/01_conda_software_space/software_checks/basic_functionality_checks/qe
 QE executable: pw.x
 QE command using default: pw.x (no qe_command.txt found)
 

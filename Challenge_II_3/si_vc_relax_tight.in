@@ -1,7 +1,7 @@
 &CONTROL
   calculation = 'vc-relax'
   prefix = 'si_tight_direct'
-  pseudo_dir = '../..'
+  pseudo_dir = '../pseudopotentials'
   outdir = './tmp_direct'
   tstress = .true.
   tprnfor = .true.

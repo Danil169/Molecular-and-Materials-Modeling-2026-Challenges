@@ -3,7 +3,7 @@
    wf_collect       = .true.
    outdir           = './tmp'
    prefix           = 'Al_Elec'
-   pseudo_dir       = '../../'
+   pseudo_dir       = '../pseudopotentials'
 /
 &SYSTEM
    ecutwfc          = 50

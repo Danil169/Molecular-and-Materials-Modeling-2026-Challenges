@@ -15,7 +15,7 @@ atoms = Atoms(
     cell=[[0., 2.7339681331, 2.7339681331], [2.7339681331, 0., 2.7339681331],
           [2.7339681331, 2.7339681331, 0.]], pbc=True,
 )
-profile = EspressoProfile('mpirun -np 4 pw.x', pseudo_dir='../..')
+profile = EspressoProfile('mpirun -np 4 pw.x', pseudo_dir='../pseudopotentials')
 summary = []
 for degauss in (0.005, 0.010, 0.020):
     tag = f'dg{int(degauss * 1000):03d}'

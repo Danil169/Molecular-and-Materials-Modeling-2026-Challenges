@@ -22,7 +22,7 @@ input_data = {
         'calculation': 'scf',
         'prefix': 'graphene',
         'outdir': './tmp',
-        'pseudo_dir': '../',
+        'pseudo_dir': '../pseudopotentials',
         'verbosity': 'low',
         'tstress': True,
         'tprnfor': True
@@ -76,7 +76,7 @@ pw_command = 'mpirun -np 4 pw.x'
 
 pw_profile = EspressoProfile(
     command=pw_command,
-    pseudo_dir='../'
+    pseudo_dir='../pseudopotentials'
 )
 
 calc = Espresso(

@@ -16,7 +16,7 @@ atoms = Atoms(
     cell=[[0.0, 2.7149, 2.7149], [2.7149, 0.0, 2.7149], [2.7149, 2.7149, 0.0]],
     pbc=True,
 )
-profile = EspressoProfile('mpirun -np 4 pw.x', pseudo_dir='../..')
+profile = EspressoProfile('mpirun -np 4 pw.x', pseudo_dir='../pseudopotentials')
 atoms.calc = Espresso(
     profile=profile,
     pseudopotentials={'Si': 'Si.upf'},

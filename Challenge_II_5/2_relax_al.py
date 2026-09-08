@@ -11,13 +11,13 @@ atoms = bulk('Al', 'fcc', a=4.049)
 
 pseudopotentials = {'Al': 'Al.upf'}
 input_data = {
-    'control': {'calculation': 'scf', 'prefix': 'al_relax', 'outdir': './tmp', 'pseudo_dir': '../../', 'tstress': True, 'tprnfor': True},
+    'control': {'calculation': 'scf', 'prefix': 'al_relax', 'outdir': './tmp', 'pseudo_dir': '../pseudopotentials', 'tstress': True, 'tprnfor': True},
     'system': {'ecutwfc': 50, 'occupations': 'smearing', 'smearing': 'mv', 'degauss': 0.02},
     'electrons': {'conv_thr': 1.0e-8}
 }
 
 os.environ['OMP_NUM_THREADS'] = '1'
-profile = EspressoProfile(command='mpirun -np 4 pw.x', pseudo_dir='../../')
+profile = EspressoProfile(command='mpirun -np 4 pw.x', pseudo_dir='../pseudopotentials')
 atoms.calc = Espresso(profile=profile, pseudopotentials=pseudopotentials, input_data=input_data, kpts=(12,12,12))
 
 print("Starting cell relaxation...")

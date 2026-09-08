@@ -1,9 +1,9 @@
 🔍 Auto-detecting system configuration...
-  ✓ Found pw.x at: /home/miroi/miniconda3/envs/mace_env/bin/pw.x
+  ✓ Found pw.x at: /home/danil/home/miniconda3/envs/mace_env/bin/pw.x
   ✓ MPI available
   ✓ Total available CPUs: 12
   ✓ Using 6 CPU cores for MPI
-  ✓ Command: mpirun -np 6 /home/miroi/miniconda3/envs/mace_env/bin/pw.x
+  ✓ Command: mpirun -np 6 /home/danil/home/miniconda3/envs/mace_env/bin/pw.x
 
 ============================================================
 ASE Quantum ESPRESSO Testing Suite
@@ -17,11 +17,11 @@ ASE Quantum ESPRESSO Testing Suite
    - Atomic positions: (0,0,0) and (1/4,1/4,1/4)
    - Coordination: 4-fold tetrahedral
 
-Script directory: /home/miroi/work/projects/mol_mat_modeling_schools/Molecular-and-Materials-Modeling-2026-August/molecular-modeling/01_conda_software_space/software_checks/basic_functionality_checks/qe
+Script directory: /home/danil/home/work/projects/mol_mat_modeling_schools/Molecular-and-Materials-Modeling-2026-August/molecular-modeling/01_conda_software_space/software_checks/basic_functionality_checks/qe
 
 📊 System Configuration:
 ----------------------------------------
-  QE command: mpirun -np 6 /home/miroi/miniconda3/envs/mace_env/bin/pw.x
+  QE command: mpirun -np 6 /home/danil/home/miniconda3/envs/mace_env/bin/pw.x
   Total available CPUs: 12
   MPI processes: 6
   Pseudopotential: Si.upf (from Pseudo-Dojo)
@@ -135,4 +135,4 @@ Passed: 3/3
    - Use smaller smearing (degauss = 0.01)
 
 💻 Current configuration:
-   mpirun -np 6 /home/miroi/miniconda3/envs/mace_env/bin/pw.x
+   mpirun -np 6 /home/danil/home/miniconda3/envs/mace_env/bin/pw.x

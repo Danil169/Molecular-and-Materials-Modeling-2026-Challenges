@@ -15,8 +15,8 @@ atoms = Atoms(
     pbc=True,
 )
 potentials = {
-    'ONCV (repository Si.upf)': ('../../', 'Si.upf'),
-    'RRKJ (QE distribution)': ('/usr/share/espresso/pseudo', 'Si.pbe-rrkj.UPF'),
+    'ONCV (repository Si.upf)': ('../pseudopotentials', 'Si.upf'),
+    'RRKJ (QE distribution)': ('../pseudopotentials', 'Si.pbe-rrkj.UPF'),
 }
 ecut_values = (45, 55, 65, 75)
 k_values = (10, 12, 14, 15)

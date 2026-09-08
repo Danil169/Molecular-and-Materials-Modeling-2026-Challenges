@@ -8,7 +8,7 @@ from ase.io import read, write
 from ase.optimize import BFGS
 
 os.environ['OMP_NUM_THREADS'] = '1'
-profile = EspressoProfile('mpirun -np 4 pw.x', pseudo_dir='../..')
+profile = EspressoProfile('mpirun -np 4 pw.x', pseudo_dir='../pseudopotentials')
 ECUT = 100
 
 def calculator(prefix, species, nat):
@@ -33,13 +33,13 @@ def relax(atoms, label, species):
     write(f'{label}_final.vasp', atoms, direct=False)
     return energy, fmax
 
-c8 = read('../c.vasp', format='vasp')
+c8 = read('c.vasp', format='vasp')
 e_c8, f_c8 = relax(c8, 'c8_100Ry', {'C': 'C.upf'})
 
-hc8 = read('../ch.vasp', format='vasp')
+hc8 = read('ch.vasp', format='vasp')
 e_hc8, f_hc8 = relax(hc8, 'hc8_100Ry', {'C': 'C.upf', 'H': 'H.upf'})
 
-h = read('../h.vasp', format='vasp')
+h = read('h.vasp', format='vasp')
 h.calc = calculator('h_100Ry', {'H': 'H.upf'}, 1)
 e_h = h.get_potential_energy()
 write('h_100Ry_final.vasp', h, direct=False)

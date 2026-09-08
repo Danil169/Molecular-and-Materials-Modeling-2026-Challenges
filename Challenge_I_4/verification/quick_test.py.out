@@ -1,0 +1,14 @@
+/home/danil/chem_venv/lib/python3.13/site-packages/e3nn/o3/_wigner.py:10: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+WARNING:root:'model_path' argument is deprecated, please use 'model_paths' in the future.
+/home/danil/chem_venv/lib/python3.13/site-packages/mace/calculators/mace.py:226: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  torch.load(f=model_path, map_location=device)
+WARNING:root:No dtype selected, switching to float64 to match model dtype.
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+MACE Quick Test
+========================================
+     H2O: -14.159366 eV (0.222s)
+     CH4: -23.912776 eV (0.463s)
+     NH3: -19.509018 eV (0.239s)
+     CO2: -22.777649 eV (0.070s)
+    C6H6: -75.705334 eV (0.373s)

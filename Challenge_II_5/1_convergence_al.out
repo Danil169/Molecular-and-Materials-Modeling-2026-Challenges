@@ -1,0 +1,15 @@
+--- 1. Ecutwfc Convergence ---
+ecutwfc = 20 Ry | Energy = -63.01060 eV
+ecutwfc = 30 Ry | Energy = -63.05350 eV
+ecutwfc = 40 Ry | Energy = -63.06077 eV
+ecutwfc = 50 Ry | Energy = -63.06095 eV
+ecutwfc = 60 Ry | Energy = -63.06103 eV
+ecutwfc = 70 Ry | Energy = -63.06111 eV
+
+--- 2. K-points Convergence (at ecut=50) ---
+kpts = (4, 4, 4) | Energy = -62.76942 eV
+kpts = (6, 6, 6) | Energy = -63.13466 eV
+kpts = (8, 8, 8) | Energy = -63.06095 eV
+kpts = (10, 10, 10) | Energy = -63.04900 eV
+kpts = (12, 12, 12) | Energy = -63.07136 eV
+kpts = (14, 14, 14) | Energy = -63.05677 eV

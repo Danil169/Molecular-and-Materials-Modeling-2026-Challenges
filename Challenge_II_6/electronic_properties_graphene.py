@@ -24,7 +24,7 @@ base_input_data = {
     'control': {
         'prefix': 'graphene',
         'outdir': './tmp',
-        'pseudo_dir': '../',
+        'pseudo_dir': '../pseudopotentials',
         'verbosity': 'low',
         'tstress': True,
         'tprnfor': True,
@@ -92,7 +92,7 @@ projwfc_command = 'mpirun -np 4 projwfc.x < projwfc.in > projwfc.out 2>&1'
 
 profile = EspressoProfile(
     command=pw_command,
-    pseudo_dir='../'
+    pseudo_dir='../pseudopotentials'
 )
 
 # Set k-grids (modify as needed)

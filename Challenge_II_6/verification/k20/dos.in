@@ -1,0 +1,4 @@
+&DOS
+ prefix='k20', outdir='./tmp', fildos='dos.dat',
+ Emin=-15, Emax=15, DeltaE=.02, ngauss=0, degauss=.01
+/

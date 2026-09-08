@@ -13,7 +13,7 @@ atoms = Atoms(
     cell=[[2.466324005, 0., 0.], [-1.2331620025, 2.1358992423, 0.], [0., 0., 15.]],
     pbc=True,
 )
-profile = EspressoProfile('mpirun -np 4 pw.x', pseudo_dir='../..')
+profile = EspressoProfile('mpirun -np 4 pw.x', pseudo_dir='../pseudopotentials')
 summary = []
 for tag, isolated in (('2d', True), ('none', False)):
     system = {'ecutwfc': 100, 'ibrav': 0, 'occupations': 'smearing', 'smearing': 'gauss', 'degauss': 0.01}

@@ -36,7 +36,7 @@
            Job information
            ---------------
 
-    hostname        = MIRO
+    hostname        = danil-B760M-DS3H-DDR4
     program         = nwchem
     date            = Tue Aug 25 06:21:44 2026
 
@@ -354,7 +354,7 @@
 
 
   library name resolved from: environment
-  library file name is: </home/miroi/miniconda3/envs/mace_env/share/nwchem/libraries/>
+  library file name is: </home/danil/home/miniconda3/envs/mace_env/share/nwchem/libraries/>
   
                       Basis "ao basis" -> "" (spherical)
                       -----
@@ -476,7 +476,7 @@
 
 
   library name resolved from: environment
-  library file name is: </home/miroi/miniconda3/envs/mace_env/share/nwchem/libraries/>
+  library file name is: </home/danil/home/miniconda3/envs/mace_env/share/nwchem/libraries/>
   
 
  **** WARNING Zero Coefficient **** on atom "               U"

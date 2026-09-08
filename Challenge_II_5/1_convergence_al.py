@@ -10,13 +10,13 @@ atoms = bulk('Al', 'fcc', a=4.049)
 # 2. Setup
 pseudopotentials = {'Al': 'Al.upf'}
 base_input_data = {
-    'control': {'calculation': 'scf', 'prefix': 'al_conv', 'outdir': './tmp', 'pseudo_dir': '../../', 'verbosity': 'low'},
+    'control': {'calculation': 'scf', 'prefix': 'al_conv', 'outdir': './tmp', 'pseudo_dir': '../pseudopotentials', 'verbosity': 'low'},
     'system': {'occupations': 'smearing', 'smearing': 'mv', 'degauss': 0.02, 'ecutwfc': 30},
     'electrons': {'conv_thr': 1.0e-8}
 }
 
 os.environ['OMP_NUM_THREADS'] = '1'
-profile = EspressoProfile(command='mpirun -np 4 pw.x', pseudo_dir='../../')
+profile = EspressoProfile(command='mpirun -np 4 pw.x', pseudo_dir='../pseudopotentials')
 
 # 3. Test values
 ecut_values = np.arange(20, 80, 10)

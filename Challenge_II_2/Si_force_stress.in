@@ -1,7 +1,7 @@
 &CONTROL
   calculation = 'scf'
   prefix = 'si_force_stress'
-  pseudo_dir = '../..'
+  pseudo_dir = '../pseudopotentials'
   outdir = './tmp'
   tstress = .true.
   tprnfor = .true.

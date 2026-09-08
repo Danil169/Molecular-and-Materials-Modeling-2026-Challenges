@@ -1,0 +1,36 @@
+{
+  "task": "I6",
+  "started_utc": "2026-09-08T16:30:22.354650+00:00",
+  "hostname": "danil-B760M-DS3H-DDR4",
+  "python": "3.13.13 | packaged by conda-forge | (main, Apr  8 2026, 02:00:33) [GCC 14.3.0]",
+  "ase": "3.29.0",
+  "qe_command": "/usr/bin/mpirun --bind-to none -np 4 /usr/bin/pw.x",
+  "cpu_affinity": [
+    16,
+    17,
+    18,
+    19
+  ],
+  "script_sha256": "7950adb82a9240df50cc3ddfc1534adde63632a98be45f6680f3c6c12b9515be"
+}
+/home/danil/chem_venv/lib/python3.13/site-packages/e3nn/o3/_wigner.py:10: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+Using Materials Project MACE for MACECalculator with /home/danil/.cache/mace/20231203mace128L1_epoch199model
+Using float64 for MACECalculator, which is slower but more accurate. Recommended for geometry optimization.
+/home/danil/chem_venv/lib/python3.13/site-packages/mace/calculators/mace.py:226: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  torch.load(f=model_path, map_location=device)
+{
+  "EMT": {
+    "CH4": 1.766778683307452,
+    "CH3": 1.8106416264430871,
+    "H": 3.21,
+    "BDE_eV": 3.253862943135635
+  },
+  "MACE": {
+    "CH4": -23.91358857102609,
+    "CH3": -18.43883058969003,
+    "H": -1.1589879653522117,
+    "BDE_eV": 4.315770015983848
+  }
+}

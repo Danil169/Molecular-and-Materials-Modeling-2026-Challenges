@@ -1,0 +1,22 @@
+{
+  "task": "I4",
+  "started_utc": "2026-09-08T16:30:30.633710+00:00",
+  "hostname": "danil-B760M-DS3H-DDR4",
+  "python": "3.13.13 | packaged by conda-forge | (main, Apr  8 2026, 02:00:33) [GCC 14.3.0]",
+  "ase": "3.29.0",
+  "qe_command": "/usr/bin/mpirun --bind-to none -np 4 /usr/bin/pw.x",
+  "cpu_affinity": [
+    16,
+    17,
+    18,
+    19
+  ],
+  "script_sha256": "7950adb82a9240df50cc3ddfc1534adde63632a98be45f6680f3c6c12b9515be",
+  "results": {
+    "water_energy_eV": -14.160288596534972,
+    "water_fmax_eV_A": 0.009001204982349296
+  },
+  "status": "completed",
+  "elapsed_seconds": 29.365151713995147,
+  "finished_utc": "2026-09-08T16:30:59.999374+00:00"
+}

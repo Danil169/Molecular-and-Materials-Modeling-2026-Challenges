@@ -1,0 +1,383 @@
+#INFO: **** input file is /home/danil/home/Molecular-and-Materials-Modeling-2026-Challenges/support/run_missing.py ****
+#!/usr/bin/env python3
+"""Execute missing school challenges; keep inputs, logs, structures and metadata.
+
+Run from any directory: python support/run_missing.py I1 I6 II1 II5 II6 II8
+QE_COMMAND overrides the default four-rank QE command. All new calculations
+use dedicated verification/ directories, never the historical output files.
+"""
+from pathlib import Path
+from datetime import datetime, timezone
+import argparse
+import contextlib
+import hashlib
+import importlib.metadata
+import json
+import os
+import platform
+import shlex
+import shutil
+import subprocess
+import sys
+import time
+import traceback
+
+import numpy as np
+from ase import Atoms, Atom
+from ase.build import molecule, bulk
+from ase.calculators.espresso import Espresso, EspressoProfile
+from ase.io import read, write
+from ase.optimize import BFGS
+
+ROOT = Path(__file__).resolve().parents[1]
+PSEUDO = ROOT / 'pseudopotentials'
+QE = os.environ.get('QE_COMMAND', 'mpirun -np 4 pw.x')
+
+
+def external(command, directory, logfile, required=None):
+    with (directory / logfile).open('w') as handle:
+        result = subprocess.run(command, cwd=directory, stdout=handle,
+                                stderr=subprocess.STDOUT, text=True)
+    text = (directory / logfile).read_text(errors='replace')
+    if result.returncode or (required and required not in text):
+        raise RuntimeError(f'{command}: returncode={result.returncode}; inspect {directory / logfile}')
+    return text
+
+
+def qe_calc(directory, label, species, kpts, system, calculation='scf'):
+    target = directory / label
+    target.mkdir(exist_ok=True)
+    data = {'control': {'calculation': calculation, 'prefix': label,
+                        'outdir': './tmp', 'tstress': True, 'tprnfor': True},
+            'system': dict(system, ibrav=0),
+            'electrons': {'conv_thr': 1e-10}}
+    return Espresso(profile=EspressoProfile(QE, pseudo_dir=str(PSEUDO)),
+                    pseudopotentials=species, input_data=data, kpts=kpts,
+                    directory=target)
+
+
+def finish_calc(directory):
+    """Delete only scratch belonging to this newly generated calculation."""
+    log = directory / 'espresso.pwo'
+    if not log.exists() or 'JOB DONE.' not in log.read_text():
+        raise RuntimeError(f'QE did not finish: {directory}')
+    scratch = directory / 'tmp'
+    if scratch.is_dir() and 'verification' in directory.parts:
+        shutil.rmtree(scratch)
+
+
+def relax(atoms, directory, label, species, system, kpts=(1, 1, 1), threshold=0.01):
+    atoms.calc = qe_calc(directory, label, species, kpts, system)
+    dest = directory / label
+    write(dest / 'initial.xyz', atoms)
+    optimizer = BFGS(atoms, logfile=str(dest / 'relaxation.log'),
+                     trajectory=str(dest / 'relaxation.traj'))
+    if not optimizer.run(fmax=threshold, steps=150):
+        raise RuntimeError(f'Unconverged geometry: {label}')
+    energy = float(atoms.get_potential_energy())
+    force = float(np.linalg.norm(atoms.get_forces(), axis=1).max())
+    write(dest / 'final.vasp', atoms, format='vasp')
+    finish_calc(dest)
+    print(label, energy, force, flush=True)
+    return {'energy_eV': energy, 'fmax_eV_A': force, 'steps': optimizer.nsteps}
+
+
+def I1(d):
+    from pyscf import gto, scf, lib
+    from ase.calculators.mopac import MOPAC
+    lib.num_threads(4)
+    atoms = molecule('H2O')
+    write(d / 'water.xyz', atoms)
+    mol = gto.M(atom=list(zip(atoms.get_chemical_symbols(), atoms.positions)),
+                basis='6-31g', verbose=4, output=str(d / 'pyscf.out'))
+    mf = scf.RHF(mol)
+    e = float(mf.kernel())
+    if not mf.converged:
+        raise RuntimeError('PySCF unconverged')
+    result = {'PySCF_Hartree': e}
+    atoms.calc = MOPAC(label=str(d / 'mopac'), method='PM7',
+                       command=f'{shutil.which("mopac")} PREFIX.mop')
+    result['MOPAC_eV'] = float(atoms.get_potential_energy())
+    external([shutil.which('xtb'), 'water.xyz', '--gfn', '2'], d, 'xtb.out', 'TOTAL ENERGY')
+    external([shutil.which('crest'), '--version'], d, 'crest-version.out')
+    (d / 'h2.nw').write_text('start h2\ngeometry units angstrom\nH 0 0 0\nH 0 0 0.74\nend\nbasis\n* library 3-21G\nend\ntask dft energy\n')
+    external([shutil.which('nwchem'), 'h2.nw'], d, 'nwchem.out', 'Total DFT energy')
+    silicon = bulk('Si', 'diamond', a=5.43)
+    silicon.calc = qe_calc(d, 'qe_si', {'Si': 'Si.upf'}, (2, 2, 2),
+                           {'ecutwfc': 30, 'occupations': 'smearing', 'smearing': 'gauss', 'degauss': .01})
+    result['QE_Si_eV'] = float(silicon.get_potential_energy())
+    finish_calc(d / 'qe_si')
+    result['CREST_test_scope'] = 'Executable version check only, as in the basic functionality script.'
+    return result
+
+
+def I4(d):
+    from mace.calculators import mace_mp
+    import torch
+    torch.set_num_threads(4)
+    result = {}
+    for script in ('quick_test.py', 'model_element_detector.py', 'model_analyzer.py', 'check_mace_ml_installation.py'):
+        external([sys.executable, str(ROOT / 'Challenge_I_4' / script)], d, script + '.out')
+    calc = mace_mp(model='medium', device='cpu', default_dtype='float64')
+    atoms = molecule('H2O'); atoms.calc = calc
+    opt = BFGS(atoms, trajectory=str(d / 'water.traj'), logfile=str(d / 'water.log'))
+    if not opt.run(fmax=.01, steps=100):
+        raise RuntimeError('Water relaxation unconverged')
+    result['water_energy_eV'] = float(atoms.get_potential_energy())
+    result['water_fmax_eV_A'] = float(np.linalg.norm(atoms.get_forces(), axis=1).max())
+    write(d / 'water_final.xyz', atoms)
+    return result
+
+
+def I6(d):
+    from mace.calculators import mace_mp
+    from ase.calculators.emt import EMT
+    import torch
+    torch.set_num_threads(4)
+    result = {}
+    for name, calc in [('EMT', EMT()), ('MACE', mace_mp(model='medium', device='cpu', default_dtype='float64'))]:
+        energies = {}
+        for formula in ('CH4', 'CH3', 'H'):
+            atoms = molecule(formula) if formula != 'H' else Atoms('H')
+            atoms.calc = calc
+            if formula != 'H':
+                opt = BFGS(atoms, trajectory=str(d / f'{formula}_{name}.traj'), logfile=str(d / f'{formula}_{name}.log'))
+                if not opt.run(fmax=.01, steps=100):
+                    raise RuntimeError(f'Unconverged {formula}/{name}')
+            energies[formula] = float(atoms.get_potential_energy())
+            write(d / f'{formula}_{name}.xyz', atoms)
+        energies['BDE_eV'] = energies['CH3'] + energies['H'] - energies['CH4']
+        result[name] = energies
+    return result
+
+
+def I8_mace(d):
+    model = Path(os.environ.get('URANIUM_MACE_MODEL', str(Path.home() / '.cache/mace/macempa0mediummodel')))
+    result = external([sys.executable, str(ROOT / 'Challenge_I_8/mace/uo2i2_core_mace-geopt.py'),
+                       '--model', str(model), '--fmax', '.05', '--steps', '100'], d, 'mace_optimization.out')
+    return {'model': model.name, 'model_sha256': hashlib.sha256(model.read_bytes()).hexdigest(),
+            'output': 'mace_optimization.out'}
+
+
+def I8_nwchem(d):
+    filename = 'uo2i2water2_ecp_b3lyp_geopt.nw'
+    shutil.copy2(ROOT / 'Challenge_I_8/nwchem/geopt' / filename, d / filename)
+    external(['/usr/bin/mpirun', '--bind-to', 'none', '-np', '4', '/usr/bin/nwchem', filename],
+             d, 'nwchem_optimization.out', 'Optimization converged')
+    return {'output': 'nwchem_optimization.out', 'converged': True}
+
+
+def II1(d):
+    result = []
+    atoms = read(ROOT / 'Challenge_II_1/Si.in', format='espresso-in')
+    for cutoff in (20, 30, 40, 50, 60, 70, 80):
+        label = f'ecut_{cutoff}'
+        atoms.calc = qe_calc(d, label, {'Si': 'Si.upf'}, (2, 2, 2),
+                             {'ecutwfc': cutoff, 'occupations': 'smearing', 'smearing': 'gauss', 'degauss': .01})
+        energy = float(atoms.get_potential_energy())
+        result.append({'ecutwfc_Ry': cutoff, 'energy_eV': energy})
+        finish_calc(d / label)
+        print(result[-1], flush=True)
+    return result
+
+
+def II5(d):
+    atoms = bulk('Al', 'fcc', a=4.049)
+    result = []
+    for series, values in [('ecut', (20, 30, 40, 50, 60, 70)), ('kgrid', (4, 6, 8, 10, 12, 14))]:
+        for value in values:
+            cutoff, k = (value, 8) if series == 'ecut' else (50, value)
+            label = f'{series}_{value}'
+            atoms.calc = qe_calc(d, label, {'Al': 'Al.upf'}, (k, k, k),
+                                 {'ecutwfc': cutoff, 'occupations': 'smearing', 'smearing': 'mv', 'degauss': .02})
+            result.append({'series': series, 'ecutwfc_Ry': cutoff, 'kgrid': k,
+                           'energy_eV': float(atoms.get_potential_energy())})
+            finish_calc(d / label)
+            print(result[-1], flush=True)
+    return result
+
+
+def II6(d):
+    atoms = read(ROOT / 'Challenge_II_6/final_relaxed_structure.vasp')
+    result = []
+    for k in (12, 18, 20, 42):
+        label = f'k{k}'
+        system = {'ecutwfc': 100, 'occupations': 'smearing', 'smearing': 'gauss',
+                  'degauss': .01, 'assume_isolated': '2D', 'nbnd': 12}
+        atoms.calc = qe_calc(d, label, {'C': 'C.upf'}, (k, k, 1), system)
+        energy = float(atoms.get_potential_energy())
+        fermi = float(atoms.calc.get_fermi_level())
+        dest = d / label
+        shutil.copy2(dest / 'espresso.pwi', dest / 'scf.in')
+        shutil.copy2(dest / 'espresso.pwo', dest / 'scf.out')
+        atoms.calc = qe_calc(d, label, {'C': 'C.upf'}, (k, k, 1), system, 'nscf')
+        atoms.calc.calculate(atoms, properties=[], system_changes=['positions', 'cell', 'numbers', 'pbc'])
+        fermi = float(atoms.calc.get_fermi_level())
+        gamma = atoms.calc.get_eigenvalues(kpt=0).tolist()
+        (dest / 'dos.in').write_text(f"&DOS\n prefix='{label}', outdir='./tmp', fildos='dos.dat',\n Emin=-15, Emax=15, DeltaE=.02, ngauss=0, degauss=.01\n/\n")
+        external([os.environ.get('DOS_COMMAND', 'dos.x'), '-in', 'dos.in'], dest, 'dos.out', 'JOB DONE')
+        data = np.loadtxt(dest / 'dos.dat')
+        result.append({'kgrid': [k, k, 1], 'scf_energy_eV': energy, 'fermi_eV': fermi,
+                       'dos_at_fermi': float(np.interp(fermi, data[:, 0], data[:, 1])),
+                       'gamma_eigenvalues_eV': gamma})
+        finish_calc(dest)
+        print(result[-1], flush=True)
+    return result
+
+
+def II8(d):
+    # Same PBE/D3/spin-polarized setup as the supplied C8 workflow.
+    # Build H@C18 by replacing Hg with H at the same top site and a C-H
+    # distance taken from the converged H@C8 geometry; relax all ions.
+    system = {'ecutwfc': 100, 'occupations': 'smearing', 'smearing': 'gauss',
+              'degauss': .01, 'nspin': 2, 'vdw_corr': 'DFT-D3', 'dftd3_version': 4}
+    result = {}
+    slab = read(ROOT / 'Challenge_II_8/Hg_on_C18/Hg_on_C18/c18.vasp')
+    ads = slab.copy()
+    ads.append(Atom('H', slab.positions[4] + [0, 0, 1.1]))
+    result['C18'] = relax(slab, d, 'c18', {'C': 'C.upf'}, system)
+    # A non-zero initial spin on H allows the odd-electron state to develop.
+    ads.set_initial_magnetic_moments([0.] * 18 + [1.])
+    result['HC18'] = relax(ads, d, 'hc18', {'C': 'C.upf', 'H': 'H.upf'}, system)
+    hydrogen = read(ROOT / 'Challenge_II_8/h.vasp')
+    hydrogen.set_initial_magnetic_moments([1.])
+    hydrogen.calc = qe_calc(d, 'h_atom', {'H': 'H.upf'}, (1, 1, 1), system)
+    result['H_energy_eV'] = float(hydrogen.get_potential_energy())
+    finish_calc(d / 'h_atom')
+    result['binding_eV'] = result['C18']['energy_eV'] + result['H_energy_eV'] - result['HC18']['energy_eV']
+    return result
+
+
+def II8_c8spin(d):
+    """Recheck C8 cutoffs with the same nonzero spin initialization as H@C18."""
+    results = []
+    for cutoff in (80, 100):
+        system = {'ecutwfc': cutoff, 'occupations': 'smearing', 'smearing': 'gauss',
+                  'degauss': .01, 'nspin': 2, 'vdw_corr': 'DFT-D3', 'dftd3_version': 4}
+        c8 = read(ROOT / 'Challenge_II_8/c8_100Ry_final.vasp')
+        hc8 = read(ROOT / 'Challenge_II_8/hc8_100Ry_final.vasp')
+        hc8.set_initial_magnetic_moments([0.] * 8 + [1.])
+        clean = relax(c8, d, f'c8_{cutoff}', {'C': 'C.upf'}, system)
+        ads = relax(hc8, d, f'hc8_{cutoff}', {'C': 'C.upf', 'H': 'H.upf'}, system)
+        hydrogen = read(ROOT / 'Challenge_II_8/h.vasp')
+        hydrogen.set_initial_magnetic_moments([1.])
+        label = f'h_{cutoff}'
+        hydrogen.calc = qe_calc(d, label, {'H': 'H.upf'}, (1, 1, 1), system)
+        eh = float(hydrogen.get_potential_energy())
+        finish_calc(d / label)
+        results.append({'ecutwfc_Ry': cutoff, 'clean': clean, 'adsorbed': ads,
+                        'H_energy_eV': eh, 'binding_eV': clean['energy_eV'] + eh - ads['energy_eV']})
+        print(results[-1], flush=True)
+    return results
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('tasks', nargs='+', choices=['I1','I4','I6','I8_mace','I8_nwchem','II1','II5','II6','II8','II8_c8spin'])
+    args = parser.parse_args()
+    failed = []
+    for task in args.tasks:
+        roman = 'II' if task.startswith('II') else 'I'
+        number = task[len(roman):].split('_')[0]
+        suffix = task.split('_', 1)[1] if '_' in task else ''
+        directory = ROOT / f'Challenge_{roman}_{number}' / ('verification' + ('_' + suffix if suffix else ''))
+        directory.mkdir(exist_ok=True)
+        record = directory / 'result.json'
+        if record.exists() and json.loads(record.read_text()).get('status') == 'completed':
+            print(f'{task}: already completed; preserved', flush=True)
+            continue
+        metadata = {'task': task, 'started_utc': datetime.now(timezone.utc).isoformat(),
+                    'hostname': platform.node(), 'python': sys.version, 'ase': importlib.metadata.version('ase'),
+                    'qe_command': QE, 'cpu_affinity': sorted(os.sched_getaffinity(0)),
+                    'script_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
+        print(f'START {task} {directory}', flush=True)
+        start = time.monotonic()
+        try:
+            with (directory / 'execution.log').open('w') as log, contextlib.redirect_stdout(log), contextlib.redirect_stderr(log):
+                print(json.dumps(metadata, indent=2), flush=True)
+                metadata['results'] = globals()[task](directory)
+                print(json.dumps(metadata['results'], indent=2), flush=True)
+            metadata['status'] = 'completed'
+        except Exception:
+            metadata['status'] = 'failed'; metadata['exception'] = traceback.format_exc()
+            failed.append(task)
+            print(metadata['exception'], flush=True)
+        metadata['elapsed_seconds'] = time.monotonic() - start
+        metadata['finished_utc'] = datetime.now(timezone.utc).isoformat()
+        record.write_text(json.dumps(metadata, indent=2) + '\n')
+        print(f'FINISH {task}: {metadata["status"]}', flush=True)
+    return bool(failed)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
+#INFO: ******************** input file end ********************
+
+
+System: uname_result(system='Linux', node='danil-B760M-DS3H-DDR4', release='7.0.0-31-generic', version='#31~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Mon Aug 10 09:38:02 UTC 2', machine='x86_64')  Threads 4
+Python 3.13.13 | packaged by conda-forge | (main, Apr  8 2026, 02:00:33) [GCC 14.3.0]
+numpy 2.5.2  scipy 1.18.1  h5py 3.16.0
+Date: Tue Sep  8 19:39:09 2026
+PySCF version 2.14.0
+PySCF path  /home/danil/chem_venv/lib/python3.13/site-packages/pyscf
+
+[CONFIG] conf_file None
+[INPUT] verbose = 4
+[INPUT] num. atoms = 3
+[INPUT] num. electrons = 10
+[INPUT] charge = 0
+[INPUT] spin (= nelec alpha-beta = 2S) = 0
+[INPUT] symmetry False subgroup None
+[INPUT] Mole.unit = angstrom
+[INPUT] Symbol           X                Y                Z      unit          X                Y                Z       unit  Magmom
+[INPUT]  1 O      0.000000000000   0.000000000000   0.119262000000 AA    0.000000000000   0.000000000000   0.225372517068 Bohr   0.0
+[INPUT]  2 H      0.000000000000   0.763239000000  -0.477047000000 AA    0.000000000000   1.442312677587  -0.901488178545 Bohr   0.0
+[INPUT]  3 H      0.000000000000  -0.763239000000  -0.477047000000 AA    0.000000000000  -1.442312677587  -0.901488178545 Bohr   0.0
+
+nuclear repulsion = 9.08829376913928
+number of shells = 9
+number of NR pGTOs = 30
+number of NR cGTOs = 13
+basis = 6-31g
+ecp = {}
+CPU time:         5.00
+
+
+******** <class 'pyscf.scf.hf.RHF'> ********
+method = RHF
+initial guess = minao
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = /tmp/tmpo_inpkma
+max_memory 4000 MB (current use 109 MB)
+Set gradient conv threshold to 3.16228e-05
+Initial guess from minao.
+init E= -75.8124045187037
+  HOMO = -0.471747091464751  LUMO = 0.120583568627358  gap/eV = 16.11814
+cycle= 1 E= -75.9448247832052  delta_E= -0.132  |g|= 0.419  |ddm|= 1.18
+  HOMO = -0.412362566634505  LUMO = 0.206695458655584  gap/eV = 16.84543
+cycle= 2 E= -75.9738606698741  delta_E= -0.029  |g|= 0.23  |ddm|= 0.41
+  HOMO = -0.502776882178293  LUMO = 0.195149012947449  gap/eV = 18.99153
+cycle= 3 E= -75.9832337108814  delta_E= -0.00937  |g|= 0.022  |ddm|= 0.145
+  HOMO = -0.499411486692968  LUMO = 0.201173318278915  gap/eV = 19.06388
+cycle= 4 E= -75.9834104697665  delta_E= -0.000177  |g|= 0.00371  |ddm|= 0.0228
+  HOMO = -0.50083142161931  LUMO = 0.201023927691105  gap/eV = 19.09846
+cycle= 5 E= -75.9834172104134  delta_E= -6.74e-06  |g|= 0.000537  |ddm|= 0.0054
+  HOMO = -0.501039156509794  LUMO = 0.200993797956537  gap/eV = 19.10329
+cycle= 6 E= -75.9834173713393  delta_E= -1.61e-07  |g|= 5.58e-05  |ddm|= 0.00094
+  HOMO = -0.501037329363923  LUMO = 0.200991658051181  gap/eV = 19.10318
+cycle= 7 E= -75.9834173732025  delta_E= -1.86e-09  |g|= 1.33e-05  |ddm|= 0.000103
+  HOMO = -0.501033122570607  LUMO = 0.200991445500993  gap/eV = 19.10306
+cycle= 8 E= -75.9834173733435  delta_E= -1.41e-10  |g|= 1.63e-06  |ddm|= 3.47e-05
+  HOMO = -0.501033379382976  LUMO = 0.200991165224288  gap/eV = 19.10306
+Extra cycle  E= -75.9834173733449  delta_E= -1.41e-12  |g|= 7.58e-07  |ddm|= 2.58e-06
+converged SCF energy = -75.9834173733449

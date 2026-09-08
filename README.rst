@@ -41,7 +41,7 @@ Part I: Molecular Modeling
 * **`Challenge_I_5/ <Challenge_I_5/readme.rst>`_**: Gas-phase thermodynamic properties of triplet O₂
   (S° = 205.2 J/(mol·K), 99.98% match with NIST experiment).
 * **`Challenge_I_6/ <Challenge_I_6/readme.rst>`_**: C–H bond dissociation energy in methane
-  (MACE: 4.48 eV vs Exp: 4.54 eV; includes dedicated DOCX report).
+  (MACE: 4.32 eV vs Exp: 4.54 eV; includes dedicated DOCX report).
 * **`Challenge_I_7/ <Challenge_I_7/readme.rst>`_**: QE/ASE ab-initio geometry relaxation of methane
   (C–H = 1.096 Å, H–C–H = 109.47° tetrahedral).
 * **`Challenge_I_8/ <Challenge_I_8/readme.rst>`_**: Multi-scale modeling of actinide complex
@@ -77,13 +77,13 @@ Summary Table
 +--------------------+-------------+---------------------------------------+-------------+
 | Challenge I.2      | Molecular   | Benchmark scaling 1 to 24 cores       | Completed   |
 +--------------------+-------------+---------------------------------------+-------------+
-| Challenge I.3      | Molecular   | N₂ atomization: 9.88 eV (MACE)        | Completed   |
+| Challenge I.3      | Molecular   | N₂ atomization: 10.31 eV (MACE)       | Completed   |
 +--------------------+-------------+---------------------------------------+-------------+
 | Challenge I.4      | Molecular   | MACE relaxation tests passed          | Completed   |
 +--------------------+-------------+---------------------------------------+-------------+
 | Challenge I.5      | Molecular   | O₂ triplet S° = 205.2 J/(mol·K)       | Completed   |
 +--------------------+-------------+---------------------------------------+-------------+
-| Challenge I.6      | Molecular   | Methane C–H: 4.48 eV (Exp: 4.54 eV)   | Completed   |
+| Challenge I.6      | Molecular   | Methane C–H: 4.32 eV (Exp: 4.54 eV)   | Completed   |
 +--------------------+-------------+---------------------------------------+-------------+
 | Challenge I.7      | Molecular   | CH₄ QE relaxation: 109.47° tetrahedral| Completed   |
 +--------------------+-------------+---------------------------------------+-------------+

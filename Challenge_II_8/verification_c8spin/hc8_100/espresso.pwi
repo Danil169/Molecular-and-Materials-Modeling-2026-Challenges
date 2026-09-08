@@ -1,0 +1,56 @@
+&CONTROL
+   calculation      = 'scf'
+   tstress          = .true.
+   tprnfor          = .true.
+   outdir           = './tmp'
+   prefix           = 'hc8_100'
+   pseudo_dir       = '/home/danil/home/Molecular-and-Materials-Modeling-2026-Challenges/pseudopotentials'
+/
+&SYSTEM
+   ibrav            = 0
+   ecutwfc          = 100
+   occupations      = 'smearing'
+   degauss          = 0.01
+   smearing         = 'gauss'
+   nspin            = 2
+   vdw_corr         = 'DFT-D3'
+   dftd3_version    = 4
+   starting_magnetization(1) = 0.0
+   starting_magnetization(2) = 1.0
+   ntyp             = 2
+   nat              = 9
+/
+&ELECTRONS
+   conv_thr         = 1e-10
+/
+&IONS
+/
+&CELL
+/
+&FCP
+/
+&RISM
+/
+ATOMIC_SPECIES
+C  12.011 C.upf
+H  1.008 H.upf
+
+K_POINTS automatic
+1 1 1  0 0 0
+
+CELL_PARAMETERS angstrom
+4.93264818190000 0.00000000000000 0.00000000000000
+-2.46632465980000 4.27179830510000 0.00000000000000
+0.00000000000000 0.00000000000000 15.00000000000000
+
+ATOMIC_POSITIONS angstrom
+C  -0.0198906859 0.0114838808 7.3745511294  
+C  -1.2331623300 2.1129313471 7.3745511294  
+C  2.4862147769 0.0114838950 7.3745511294  
+C  1.2331617610 2.1358991530 7.8411477276  
+C  -0.0339973673 1.4043044102 7.4155182359  
+C  -1.2331625190 3.5598318360 7.5495814147  
+C  2.5003209313 1.4043044198 7.4155182359  
+C  1.2331614240 3.5990883956 7.4155182359  
+H  1.2331617610 2.1358991530 8.9390626832  
+

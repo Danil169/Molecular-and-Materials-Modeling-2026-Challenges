@@ -1,5 +1,5 @@
 
-     Program PWSCF v.7.5 starts on 27Aug2026 at 14:49:25 
+     Program PWSCF v.7.5 starts on  8Sep2026 at 19:48:12 
 
      This program is part of the open-source Quantum ESPRESSO suite
      for quantum simulation of materials; please cite
@@ -15,7 +15,7 @@
      Threads/MPI process:                     1
 
      MPI processes distributed on     1 nodes
-     2842 MiB available memory on the printing compute node when the environment starts
+     1277 MiB available memory on the printing compute node when the environment starts
 
      Reading input from espresso.pwi
 Warning: card &IONS ignored
@@ -77,7 +77,7 @@ Warning: card &RISM ignored
 
 
      PseudoPot. # 1 for Al read from file:
-     ../../Al.upf
+     ../pseudopotentials/Al.upf
      MD5 check sum: 0b5c6c21fc59a2e497c09c32fa85f380
      Pseudo is Norm-conserving + core correction, Zval =  3.0
      Generated using ONCVPSP code by D. R. Hamann
@@ -120,61 +120,3 @@ Warning: card &RISM ignored
      Davidson diagonalization with overlap
      c_bands:  1 eigenvalues not converged
      c_bands:  1 eigenvalues not converged
-
-     ethr =  3.33E-10,  avg # of iterations = 36.0
-
-     total cpu time spent up to now is        3.1 secs
-
-     End of band structure calculation
-
-     Number of k-points >= 100: set verbosity='high' to print the bands.
-
-     the Fermi energy is     7.9730 ev
-     (compare with:     7.8440 eV, computed in scf)
-
-     Writing all to output data dir ./tmp/Al_Elec.save/ :
-     XML data file, pseudopotentials, collected wavefunctions
-
-     init_run     :      0.04s CPU      0.04s WALL (       1 calls)
-     electrons    :      2.89s CPU      3.08s WALL (       1 calls)
-
-     Called by init_run:
-     wfcinit      :      0.00s CPU      0.00s WALL (       1 calls)
-     potinit      :      0.00s CPU      0.00s WALL (       1 calls)
-     hinit0       :      0.03s CPU      0.03s WALL (       1 calls)
-
-     Called by electrons:
-     c_bands      :      2.89s CPU      3.07s WALL (       1 calls)
-     v_of_rho     :      0.00s CPU      0.00s WALL (       1 calls)
-
-     Called by c_bands:
-     init_us_2    :      0.01s CPU      0.01s WALL (     413 calls)
-     cegterg      :      2.76s CPU      2.94s WALL (     941 calls)
-
-     Called by *egterg:
-     cdiaghg      :      0.30s CPU      0.31s WALL (   15289 calls)
-     h_psi        :      2.22s CPU      2.36s WALL (   16230 calls)
-     g_psi        :      0.03s CPU      0.03s WALL (   14876 calls)
-
-     Called by h_psi:
-     h_psi:calbec :      0.09s CPU      0.10s WALL (   16230 calls)
-     vloc_psi     :      2.05s CPU      2.18s WALL (   16230 calls)
-                                        0.00s GPU  (   16230 calls)
-     add_vuspsi   :      0.05s CPU      0.05s WALL (   16230 calls)
-
-     General routines
-     calbec       :      0.09s CPU      0.09s WALL (   16230 calls)
-     fft          :      0.02s CPU      0.02s WALL (      11 calls)
-     fftw         :      1.83s CPU      1.94s WALL (  133920 calls)
-     davcio       :      0.00s CPU      0.00s WALL (     826 calls)
-
-     Parallel routines
-
-     PWSCF        :      3.04s CPU      3.24s WALL
-
-
-   This run was terminated on:  14:49:28  27Aug2026            
-
-=------------------------------------------------------------------------------=
-   JOB DONE.
-=------------------------------------------------------------------------------=

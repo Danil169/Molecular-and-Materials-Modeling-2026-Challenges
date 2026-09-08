@@ -22,7 +22,7 @@ atoms = Atoms(
 
 # 2. Настройки запуска (Используем 4 ядра и правильный путь к псевдопотенциалам)
 pw_command = 'mpirun -np 4 pw.x'
-pw_profile = EspressoProfile(command=pw_command, pseudo_dir='../')
+pw_profile = EspressoProfile(command=pw_command, pseudo_dir='../pseudopotentials')
 pseudopotentials = {'Si': 'Si.upf'}
 scf_kpts = (2, 2, 2)
 
@@ -40,7 +40,7 @@ for ecut in cutoffs:
     input_data = {
         'control': {
             'calculation': 'scf',
-            'pseudo_dir': '../'
+            'pseudo_dir': '../pseudopotentials'
         },
         'system': {
             'ibrav': 0, 'nat': 2, 'ntyp': 1,

@@ -11,8 +11,8 @@ Results
 -------
 * **N₂ molecule**:
   * EMT Atomization Energy: 9.76 eV
-  * MACE Atomization Energy: 9.88 eV
-  * Experimental benchmark: 9.79 eV (excellent agreement)
+  * MACE Atomization Energy: 10.31 eV
+  * Experimental benchmark: 9.79 eV (excellent agreement for EMT, MACE overbinds due to known N2 self-interaction error)
 * **O₂ molecule**:
   * Evaluated with triplet spin state consideration.
 * **Physical Insights**:

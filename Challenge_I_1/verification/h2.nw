@@ -1,0 +1,9 @@
+start h2
+geometry units angstrom
+H 0 0 0
+H 0 0 0.74
+end
+basis
+* library 3-21G
+end
+task dft energy

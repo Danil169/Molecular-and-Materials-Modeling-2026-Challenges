@@ -12,13 +12,13 @@ atoms = read('al_relaxed.vasp')
 # 2. Setup
 pseudopotentials = {'Al': 'Al.upf'}
 base_input_data = {
-    'control': {'prefix': 'Al_Elec', 'outdir': './tmp', 'pseudo_dir': '../../', 'wf_collect': True},
+    'control': {'prefix': 'Al_Elec', 'outdir': './tmp', 'pseudo_dir': '../pseudopotentials', 'wf_collect': True},
     'system': {'ecutwfc': 50, 'occupations': 'smearing', 'smearing': 'mv', 'degauss': 0.02},
     'electrons': {'conv_thr': 1.0e-8}
 }
 
 os.environ['OMP_NUM_THREADS'] = '1'
-profile = EspressoProfile(command='mpirun -np 4 pw.x', pseudo_dir='../../')
+profile = EspressoProfile(command='mpirun -np 4 pw.x', pseudo_dir='../pseudopotentials')
 
 # SCF
 print("Running SCF...")

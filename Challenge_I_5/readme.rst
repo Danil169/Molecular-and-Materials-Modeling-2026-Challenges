@@ -18,5 +18,5 @@ Results
 Files in this Directory
 -----------------------
 * ``O2_thermodyn_EMT_MACE.py``: Script setting up vibration analysis and IdealGasThermo.
-* ``O2_thermodyn_EMT_MACE.out``: Output log with full thermochemical table.
+* ``O2_thermodyn_EMT_MACE.py_logfileSAVED``: Output log with full thermochemical table.
 * ``vib_o2_mace/``: Hessian displacement caches.

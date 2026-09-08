@@ -17,7 +17,7 @@ atoms = molecule('CH4')
 atoms.set_cell([12.0, 12.0, 12.0])
 atoms.center()
 
-profile = EspressoProfile('mpirun -np 4 pw.x', pseudo_dir='/usr/share/espresso/pseudo')
+profile = EspressoProfile('mpirun -np 4 pw.x', pseudo_dir='../pseudopotentials')
 calc = Espresso(
     profile=profile,
     pseudopotentials={
